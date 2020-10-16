@@ -4,20 +4,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileOpenManagerTest {
     FileOpenManager manager = new FileOpenManager();
-    Collection<String> testSet = new TreeSet<>();
-    String firstExt = ".iml";
+    Collection<String> testExtSet = new TreeSet<>();
+    Collection<String> testAppSet = new TreeSet<>();
     String firstApp = "IDEA";
-    String secondExt = ".Md";
+    String firstExt = ".iml";
     String secondApp = "Atom";
-    String thirdExt = ".TXT";
+    String secondExt = ".Md";
     String thirdApp = "Notepad";
+    String thirdExt = ".TXT";
 
     /* Регистрировать новое приложение для открытия файлов с определённым расширением */
     @BeforeEach
@@ -25,15 +25,18 @@ class FileOpenManagerTest {
         manager.register(firstExt, firstApp);
         manager.register(secondExt, secondApp);
         manager.register(thirdExt, thirdApp);
-        testSet.add(firstExt.toLowerCase());
-        testSet.add(secondExt.toLowerCase());
-        testSet.add(thirdExt.toLowerCase());
+        testExtSet.add(firstExt.toLowerCase());
+        testExtSet.add(thirdExt.toLowerCase());
+        testExtSet.add(secondExt.toLowerCase());
+        testAppSet.add(secondApp.toLowerCase());
+        testAppSet.add(firstApp.toLowerCase());
+        testAppSet.add(thirdApp.toLowerCase());
     }
 
     /* Получать название приложения, предназначенного для открытия файла с определённым расширением */
     @Test
     public void shouldSearchApplication() {
-        assertEquals(secondApp, manager.getAppTitle(secondExt));
+        assertEquals(secondApp.toLowerCase(), manager.getAppTitle(secondExt));
     }
 
     /* Удалять привязку приложения к определённому расширению */
@@ -46,12 +49,12 @@ class FileOpenManagerTest {
     /* Получать список всех зарегистрированных расширений, к которым привязаны приложения для открытия */
     @Test
     public void shouldGetAllExtensions() {
-        assertEquals(testSet, manager.allExtensions());
+        assertEquals(testExtSet, manager.allExtensions());
     }
 
     /* Получать список всех приложений, которые привязаны к каким-либо расширениям */
     @Test
     public void shouldGetAllApplications() {
-        assertEquals(List.of(thirdApp, secondApp, firstApp), manager.allApps());
+        assertEquals(testAppSet, manager.allApps());
     }
 }
